@@ -8,12 +8,23 @@ use Illuminate\Support\Facades\Auth;
 
 class TaskController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $tasks = Auth::user()->tasks()->latest()->get();
+        $query = Auth::user()->tasks();
+    
+       
+        if ($request->has('status')) {
+            $query->where('status', $request->status);
+        }
+
+        if ($request->has('priority')) {
+            $query->where('priority', $request->priority);
+        }
+    
+        $tasks = $query->latest()->get();
         return view('tasks.index', compact('tasks'));
     }
-
+    
     public function create()
     {
         return view('tasks.create');
@@ -24,33 +35,36 @@ class TaskController extends Controller
         $validated = $request->validate([
             'title' => 'required|string|max:255',
             'description' => 'required|string',
+            'priority' => 'required|integer|between:1,3',
         ]);
-
+    
         Auth::user()->tasks()->create($validated);
-
+    
         return redirect()->route('tasks.index')->with('success', 'Task created successfully.');
     }
+    
 
     public function edit(Task $task)
     {
         $this->authorize('update', $task);
         return view('tasks.edit', compact('task'));
     }
-
     public function update(Request $request, Task $task)
     {
         $this->authorize('update', $task);
-
+    
         $validated = $request->validate([
             'title' => 'required|string|max:255',
             'description' => 'required|string',
-            'status' => 'boolean'
+            'status' => 'boolean',
+            'priority' => 'required|integer|between:1,3',
         ]);
-
+    
         $task->update($validated);
         return redirect()->route('tasks.index')->with('success', 'Task updated successfully.');
     }
-
+    
+   
     public function destroy(Task $task)
     {
         $this->authorize('delete', $task);

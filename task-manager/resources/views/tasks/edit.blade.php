@@ -15,6 +15,14 @@
             <textarea name="description" class="form-control" required>{{ $task->description }}</textarea>
         </div>
         <div class="mb-3">
+    <label>Priority</label>
+    <select name="priority" class="form-control">
+        <option value="1" {{ $task->priority == 1 ? 'selected' : '' }}>High</option>
+        <option value="2" {{ $task->priority == 2 ? 'selected' : '' }}>Medium</option>
+        <option value="3" {{ $task->priority == 3 ? 'selected' : '' }}>Low</option>
+    </select>
+</div>
+        <div class="mb-3">
             <label>Status</label>
             <input type="checkbox" name="status" {{ $task->status ? 'checked' : '' }}>
         </div>
