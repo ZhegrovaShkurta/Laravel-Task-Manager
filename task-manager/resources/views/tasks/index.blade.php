@@ -4,7 +4,6 @@
 <div class="container">
     <h2>My Tasks</h2>
 
-   
     <a href="{{ route('tasks.create') }}" class="btn btn-primary mb-3">Create Task</a>
 
     <form method="GET" action="{{ route('tasks.index') }}" class="mb-4">
@@ -30,26 +29,24 @@
         </div>
     </form>
 
-
     @forelse($tasks as $task)
         <div class="card mb-3">
             <div class="card-body">
                 <h5>{{ $task->title }}</h5>
                 <p>{{ $task->description }}</p>
-                <p><strong>Priority:</strong> 
+                <p><strong>Priority:</strong>
                     {{ $task->priority == 1 ? 'High' : ($task->priority == 2 ? 'Medium' : 'Low') }}
                 </p>
-                <p><strong>Status:</strong> 
+                <p><strong>Status:</strong>
                     {{ $task->status ? 'Completed' : 'Not Completed' }}
                 </p>
 
-            
                 <a href="{{ route('tasks.edit', $task) }}" class="btn btn-warning">Edit</a>
-               
+
                 <form method="POST" action="{{ route('tasks.destroy', $task) }}" style="display: inline-block;">
                     @csrf
                     @method('DELETE')
-                    <button class="btn btn-danger">Delete</button>
+                    <button type="submit" class="btn btn-danger">Delete</button>
                 </form>
             </div>
         </div>
